@@ -48,14 +48,14 @@ public class DataCollector {
 	 */
 	public void run(String[] args) {
 		
-//		try {
-//			// when there are not enough arguments from CLI, it throws the NotEnoughArgmentException which must be defined by you.
-//			if(args.length<2)
-//				throw new NotEnoughArgumentException();
-//		} catch (NotEnoughArgumentException e) {
-//			System.out.println(e.getMessage());
-//			System.exit(0);
-//		}
+		try {
+			// when there are not enough arguments from CLI, it throws the NotEnoughArgmentException which must be defined by you.
+			if(args.length<2)
+				throw new NotEnoughArgumentException();
+		} catch (NotEnoughArgumentException e) {
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
 		
 		Options options = createOptions();
 		
@@ -72,31 +72,30 @@ public class DataCollector {
 		result1 = new ArrayList<ArrayList<String>>();
 		result2 = new ArrayList<ArrayList<String>>();
 		
-		System.out.println(input);
+//		System.out.println(input);
 		File dirFile = new File(input);
 		File []fileList=dirFile.listFiles();
 		String str = output;
 		String[] outputfliname = str.split("\\.");
 
-
-		System.out.println("dddd"+outputfliname[0]);
 		
 		ZipFile zipFile;
 		try {
 			
 
 			boolean header=true;
+			int filenum=1;
 			for(File tempFile: fileList) {
 				if(tempFile.isFile()) {
 				zipFile = new ZipFile(tempFile);
-				System.out.println("ffffff");
+//				System.out.println("ffffff");
 				Enumeration<? extends ZipArchiveEntry> entries = zipFile.getEntries();
 				int order =0;
 			    while(entries.hasMoreElements()){
-			    	System.out.println(tempFile+": "+order+"번째 파일 시작");
-			    	System.out.println("   ");
-			    	System.out.println("   ");
-			    	System.out.println("   ");
+//			    	System.out.println(tempFile+": "+order+"번째 파일 시작");
+//			    	System.out.println("   ");
+//			    	System.out.println("   ");
+//			    	System.out.println("   ");
 			    	
 			    	
 			    	ZipArchiveEntry entry = entries.nextElement();
@@ -104,17 +103,20 @@ public class DataCollector {
 			    
 			        ExcelReader myReader = new ExcelReader();
 			        
+			        String resultFilename= "000"+ Integer.toString(filenum);
+			        if(order==0)result1.add(myReader.getData(stream,header,order,resultFilename));
+			        else result2.add(myReader.getData(stream,header,order,resultFilename));
 			        
-			        if(order==0)result1.add(myReader.getData(stream,header,order));
-			        else result2.add(myReader.getData(stream,header,order));
+			        
 			        order++;
-			    }System.out.println(tempFile+": "+"폴더 끝");
-			    System.out.println("   ");
-			    System.out.println("   ");
-			    System.out.println("   ");
+			    }
+//			    System.out.println(tempFile+": "+"폴더 끝");
+//			    System.out.println("   ");
+//			    System.out.println("   ");
+//			    System.out.println("   ");
 			    header=false;
-				
-			}
+			    zipFile.close();
+			}filenum++;
 		}
 	
 			Utils.writeAFile(result1,outputfliname[0]+"1."+outputfliname[1]);
@@ -206,8 +208,8 @@ public class DataCollector {
 			output = cmd.getOptionValue("o");
 			help = cmd.hasOption("h");
 			
-			System.out.println("input in options : "+input);
-			System.out.println("output in options : "+output);
+//			System.out.println("input in options : "+input);
+//			System.out.println("output in options : "+output);
 
 
 		} catch (Exception e) {

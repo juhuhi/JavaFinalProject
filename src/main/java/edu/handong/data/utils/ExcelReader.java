@@ -16,7 +16,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class ExcelReader {
 	
-	public ArrayList<String> getData(InputStream is, boolean header,int order) {
+	public ArrayList<String> getData(InputStream is, boolean header,int order,String Filenum) {
 		ArrayList<String> values = new ArrayList<String>();
 		
 		try (InputStream inp = is) {
@@ -32,14 +32,15 @@ public class ExcelReader {
 	                    for (int columnIndex = 0; columnIndex <= cells; columnIndex++) {
 	                        Cell cell = row.getCell(columnIndex);
 	                        if(cell != null) {
-	                        	onerow +="\""+(getStringValue(cell).trim().replace("\n", " "))+"\""+",";
+	                        	
+	                        	onerow +="\""+(getStringValue(cell).trim().replace("\n", " ").replaceAll("^\"|\"$", ""))+"\""+",";
 	                        } 
 	                        else {
 	                        	if(onerow.length()<1) {onerow+="\""+" "+"\",";};
 	                        };
 	                    }
-	                    values.add(onerow);
-	                    System.out.println(onerow);
+	                    values.add("학생번호,"+onerow);
+	                    //System.out.println(onerow);
 	                  
 	                }
 		        	
@@ -54,14 +55,14 @@ public class ExcelReader {
 	                    for (int columnIndex = 0; columnIndex <= cells; columnIndex++) {
 	                        Cell cell = row.getCell(columnIndex);
 	                        if(cell != null) {
-	                        	onerow +="\""+(getStringValue(cell).trim().replace("\n", " "))+"\""+",";
+	                        	onerow +="\""+(getStringValue(cell).trim().replace("\n", " ").replaceAll("^\"|\"$", ""))+"\""+",";
 	                        } 
 	                        else {
 	                        	if(onerow.length()<1) {onerow+="\""+" "+"\",";};
 	                        };
 	                    }
-	                    values.add(onerow);
-	                    System.out.println(onerow);
+	                    values.add("\""+Filenum+"\""+","+onerow);
+	                    //System.out.println(onerow);
 	                  
 	                }
 	            }
