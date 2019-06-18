@@ -7,13 +7,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import edu.handong.data.utils.JuhuiArrayList;
 
 public class Utils {
 
-public static void writeAFile(ArrayList<ArrayList<String>> ArrayListlines, String targetFileName) {
+public static void writeAFile(JuhuiArrayList<ArrayList<String>> ArrayListlines, String targetFileName) {
 		//taretFileName이 올바른 경로에, 존재하는 파일인지 확인해야함.
 		//그리고 lines에 있는 걸 file에 입력해야함.
 	
+
 		 File file = new File(targetFileName);
 		 
 		 //File directory = new File(tmp.getParentFile().getAbsolutePath());
@@ -28,7 +30,7 @@ public static void writeAFile(ArrayList<ArrayList<String>> ArrayListlines, Strin
 		 
 		 try {
 			 writer = new FileWriter(file, false);
-			 for(ArrayList<String> lines:ArrayListlines) {
+			 for(ArrayList<String> lines: ArrayListlines.get()) {
 				 for(String line:lines) {			 
 					 writer.write(line);
 					 writer.write("\n");

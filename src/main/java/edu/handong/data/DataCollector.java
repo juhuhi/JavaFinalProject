@@ -26,16 +26,17 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import edu.handong.data.utils.ExcelReader;
-import edu.handong.data.utils.NotEnoughArgumentException;
 import edu.handong.data.utils.Utils;
+import edu.handong.data.utils.JuhuiArrayList;
+
 
 
 public class DataCollector {
 
 	String input;
 	String output;
-	private ArrayList<ArrayList<String>> result1;
-	private ArrayList<ArrayList<String>> result2;
+	private JuhuiArrayList<ArrayList<String>> result1;
+	private JuhuiArrayList<ArrayList<String>> result2;
 
 	boolean help;
 	
@@ -48,14 +49,14 @@ public class DataCollector {
 	 */
 	public void run(String[] args) {
 		
-		try {
-			// when there are not enough arguments from CLI, it throws the NotEnoughArgmentException which must be defined by you.
-			if(args.length<2)
-				throw new NotEnoughArgumentException();
-		} catch (NotEnoughArgumentException e) {
-			System.out.println(e.getMessage());
-			System.exit(0);
-		}
+//		try {
+//			// when there are not enough arguments from CLI, it throws the NotEnoughArgmentException which must be defined by you.
+//			if(args.length<2)
+//				throw new NotEnoughArgumentException();
+//		} catch (NotEnoughArgumentException e) {
+//			System.out.println(e.getMessage());
+//			System.exit(0);
+//		}
 		
 		Options options = createOptions();
 		
@@ -69,15 +70,14 @@ public class DataCollector {
 		
 	
 		ArrayList<String> filename=new ArrayList<String>();
-		result1 = new ArrayList<ArrayList<String>>();
-		result2 = new ArrayList<ArrayList<String>>();
+		result1 = new JuhuiArrayList<ArrayList<String>>();
+		result2 = new JuhuiArrayList<ArrayList<String>>();
 		
 //		System.out.println(input);
 		File dirFile = new File(input);
 		File []fileList=dirFile.listFiles();
 		String str = output;
 		String[] outputfliname = str.split("\\.");
-
 		
 		ZipFile zipFile;
 		try {
@@ -136,61 +136,6 @@ public class DataCollector {
 
 		
 
-		
-//		if(parseOptions(options, args)){
-//			if (help||output==null){
-//				printHelp(options);
-//				return;
-//			}
-//			
-//		
-//			ArrayList<String> filename=new ArrayList<String>();
-//
-//			File dirFile = new File(input);
-//			File []fileList=dirFile.listFiles();
-//			for(File tempFile: fileList) {
-//				if(tempFile.isFile()) {
-//					System.out.println(tempFile.getName());
-//					filename.add(tempFile.getName());
-//				}
-//			}
-//			
-//			ZipFile zipFile;
-//			try {
-//				boolean header=false;
-//				System.out.println("dd");
-//				for(String zipfilename : filename) {
-//					System.out.println("sssss");
-//					zipFile = new ZipFile(input+zipfilename);
-//					System.out.println("ffffff");
-//					Enumeration<? extends ZipArchiveEntry> entries = zipFile.getEntries();
-//					int order =1;
-//				    while(entries.hasMoreElements()){
-//				    	System.out.println(zipfilename+": "+order+"번째 파일 시작");
-//				    	
-//				    	ZipArchiveEntry entry = entries.nextElement();
-//				        InputStream stream = zipFile.getInputStream(entry);
-//				    
-//				        ExcelReader myReader = new ExcelReader();
-//				        if(order==1)Utils.writeAFile(myReader.getData(stream,order),output+"1",header);
-//				        else Utils.writeAFile(myReader.getData(stream,order),output+"2",header);
-//				        order++;
-//				        header=true;
-//				    }System.out.println(zipfilename+": "+"폴더 끝");
-//					
-//				}
-//						
-//
-//			} catch (FileNotFoundException e) {
-//				System.out.println ("The file path does not exist. Please check your CLI argument!");
-//				System.exit (0);
-//			} catch (IOException e) {
-//				System.out.println ("IOException");
-//				System.exit (0);
-//			}
-//
-//			
-//	}
 
 }
 	}

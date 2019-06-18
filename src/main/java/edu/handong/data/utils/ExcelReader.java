@@ -61,9 +61,16 @@ public class ExcelReader {
 	                        	if(onerow.length()<1) {onerow+="\""+" "+"\",";};
 	                        };
 	                    }
+
+	                    if (onerow.length()>12) {
 	                    values.add("\""+Filenum+"\""+","+onerow);
-	                    //System.out.println(onerow);
-	                  
+	                    }
+	                    
+//	                    System.out.println(onerow);
+//	                    System.out.println(onerow.length());
+	                    
+	              
+	                    
 	                }
 	            }
 		    
@@ -79,18 +86,19 @@ public class ExcelReader {
 		
 		return values;
 	}
-
-
-
-public static String getStringValue(Cell cell) {
-    String rtnValue = "";
-    try {
-        rtnValue = cell.getStringCellValue();
-    } catch(IllegalStateException e) {
-        rtnValue = Integer.toString((int)cell.getNumericCellValue());            
-    }
+	
+	
+	
+	
+	public static String getStringValue(Cell cell) {
+		String rtnValue = "";
+		try {
+			rtnValue = cell.getStringCellValue();
+		} catch(IllegalStateException e) {
+			rtnValue = Integer.toString((int)cell.getNumericCellValue());            
+		}
     
-    return rtnValue;
-}
+		return rtnValue;
+	}
 }
 
