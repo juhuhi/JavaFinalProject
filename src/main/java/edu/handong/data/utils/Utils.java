@@ -12,8 +12,7 @@ import edu.handong.data.utils.JuhuiArrayList;
 public class Utils {
 
 public static void writeAFile(JuhuiArrayList<ArrayList<String>> ArrayListlines, String targetFileName) {
-		//taretFileName이 올바른 경로에, 존재하는 파일인지 확인해야함.
-		//그리고 lines에 있는 걸 file에 입력해야함.
+
 	
 	
 	 FileWriter writer = null;
