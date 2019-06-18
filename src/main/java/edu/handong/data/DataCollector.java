@@ -4,14 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -21,62 +15,46 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 
 import edu.handong.data.utils.ExcelReader;
-import edu.handong.data.utils.Utils;
 import edu.handong.data.utils.JuhuiArrayList;
+import edu.handong.data.utils.Utils;
 
 
 
-public class DataCollector {
+public class DataCollector implements Runnable{
 
 	String input;
 	String output;
+	String outputflie2;
 	private JuhuiArrayList<ArrayList<String>> result1;
 	private JuhuiArrayList<ArrayList<String>> result2;
 
 	boolean help;
 	
 	//C:\Users\한주희\Desktop\hw5data.csv C:\Users\한주희\Desktop\Iwannagobakchame\ladfasdfasdfsdfd.csv
-	
-	/**
-	 * This method runs our analysis logic to save the number courses taken by each student per semester in a result file.
-	 * Run method must not be changed!!
-	 * @param args
-	 */
-	public void run(String[] args) {
-		
-//		try {
-//			// when there are not enough arguments from CLI, it throws the NotEnoughArgmentException which must be defined by you.
-//			if(args.length<2)
-//				throw new NotEnoughArgumentException();
-//		} catch (NotEnoughArgumentException e) {
-//			System.out.println(e.getMessage());
-//			System.exit(0);
-//		}
-		
-		Options options = createOptions();
-		
-		if(parseOptions(options, args)){
-		
 
-		if (help||output==null){
-			printHelp(options);
+	public static void main(String[] args) {
+
+		DataCollector DC = new DataCollector();		
+		Options options = DC.createOptions();
+		
+		if(DC.parseOptions(options, args)){
+
+
+		if (DC.help||DC.output==null){
+			DC.printHelp(options);
 			return;
 		}
 		
 	
 		ArrayList<String> filename=new ArrayList<String>();
-		result1 = new JuhuiArrayList<ArrayList<String>>();
-		result2 = new JuhuiArrayList<ArrayList<String>>();
+		DC.result1 = new JuhuiArrayList<ArrayList<String>>();
+		DC.result2 = new JuhuiArrayList<ArrayList<String>>();
 		
-//		System.out.println(input);
-		File dirFile = new File(input);
+		File dirFile = new File(DC.input);
 		File []fileList=dirFile.listFiles();
-		String str = output;
+		String str = DC.output;
 		String[] outputfliname = str.split("\\.");
 		
 		ZipFile zipFile;
@@ -88,14 +66,11 @@ public class DataCollector {
 			for(File tempFile: fileList) {
 				if(tempFile.isFile()) {
 				zipFile = new ZipFile(tempFile);
-//				System.out.println("ffffff");
+
 				Enumeration<? extends ZipArchiveEntry> entries = zipFile.getEntries();
 				int order =0;
 			    while(entries.hasMoreElements()){
-//			    	System.out.println(tempFile+": "+order+"번째 파일 시작");
-//			    	System.out.println("   ");
-//			    	System.out.println("   ");
-//			    	System.out.println("   ");
+
 			    	
 			    	
 			    	ZipArchiveEntry entry = entries.nextElement();
@@ -104,23 +79,25 @@ public class DataCollector {
 			        ExcelReader myReader = new ExcelReader();
 			        
 			        String resultFilename= "000"+ Integer.toString(filenum);
-			        if(order==0)result1.add(myReader.getData(stream,header,order,resultFilename));
-			        else result2.add(myReader.getData(stream,header,order,resultFilename));
+			        if(order==0)DC.result1.add(myReader.getData(stream,header,order,resultFilename));
+			        else DC.result2.add(myReader.getData(stream,header,order,resultFilename));
 			        
 			        
 			        order++;
 			    }
-//			    System.out.println(tempFile+": "+"폴더 끝");
-//			    System.out.println("   ");
-//			    System.out.println("   ");
-//			    System.out.println("   ");
+	
 			    header=false;
 			    zipFile.close();
 			}filenum++;
 		}
-	
-			Utils.writeAFile(result1,outputfliname[0]+"1."+outputfliname[1]);
-	        Utils.writeAFile(result2,outputfliname[0]+"2."+outputfliname[1]);
+			DC.outputflie2=outputfliname[0]+"2."+outputfliname[1];
+
+			Thread Filemaker = new Thread(DC,"첫번째");
+			Filemaker.start();
+			
+			
+			Utils.writeAFile(DC.result1,outputfliname[0]+"1."+outputfliname[1]);
+	        
 			
 			
 			
@@ -140,6 +117,10 @@ public class DataCollector {
 }
 	}
 	
+	public void run() {
+		Utils.writeAFile(result2,outputflie2);
+	}
+	
 
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
@@ -153,9 +134,6 @@ public class DataCollector {
 			output = cmd.getOptionValue("o");
 			help = cmd.hasOption("h");
 			
-//			System.out.println("input in options : "+input);
-//			System.out.println("output in options : "+output);
-
 
 		} catch (Exception e) {
 			printHelp(options);

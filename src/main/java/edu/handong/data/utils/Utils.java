@@ -15,20 +15,22 @@ public static void writeAFile(JuhuiArrayList<ArrayList<String>> ArrayListlines, 
 		//taretFileName이 올바른 경로에, 존재하는 파일인지 확인해야함.
 		//그리고 lines에 있는 걸 file에 입력해야함.
 	
-
-		 File file = new File(targetFileName);
-		 
-		 //File directory = new File(tmp.getParentFile().getAbsolutePath());
-		 //directory.mkdirs();
-		 
-		 if(!(file.getParentFile()==null)&&!file.getParentFile().exists()){
-			// System.out.println("dd");
-			 file.getParentFile().mkdirs();
-		 }
-		 
-		 FileWriter writer = null;
+	
+	 FileWriter writer = null;
 		 
 		 try {
+
+			File file = new File(targetFileName);
+			 
+			 //File directory = new File(tmp.getParentFile().getAbsolutePath());
+			 //directory.mkdirs();
+			 
+			 //if(!(file.getParentFile()==null)&&!file.getParentFile().exists()){
+			 if(!file.exists()) {
+				// System.out.println("dd");
+				 file.getParentFile().mkdirs();
+			 }
+			 
 			 writer = new FileWriter(file, false);
 			 for(ArrayList<String> lines: ArrayListlines.get()) {
 				 for(String line:lines) {			 
